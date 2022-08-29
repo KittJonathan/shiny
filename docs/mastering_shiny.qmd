@@ -47,30 +47,94 @@ server <- function(input, output, session) {
 shinyApp(ui, server)
 ```
 
-Notre app fait 4 choses : 
+Notre app fait 4 choses :
 
-1) Charger le package Shiny
-2) Définir l'interface utilisateur, la page html avec laquelle l'utilisateur va interagir
-3) Spécifier le comportement de notre app en définissant la fonction server (vide pour l'instant)  
-4) Exécuter shinyApp(ui, server) pour construire et démarrer l'app
+1)  Charger le package Shiny
+2)  Définir l'interface utilisateur, la page html avec laquelle l'utilisateur va interagir
+3)  Spécifier le comportement de notre app en définissant la fonction server (vide pour l'instant)\
+4)  Exécuter shinyApp(ui, server) pour construire et démarrer l'app
 
-Astuces pour créer une nouvelle app dans RStudio :
-1) File > New Project > New Directory > Shiny Web Application
-2) dans un script app.R, taper "shinyapp" puis Shift + Tab
+Astuces pour créer une nouvelle app dans RStudio : 1) File \> New Project \> New Directory \> Shiny Web Application 2) dans un script app.R, taper "shinyapp" puis Shift + Tab
 
 ### Running and stopping
 
-Pour démarrer une app : 
-1) Cliquer sur Run app 
-2) Ctrl + Shift + Entrée
-3) shiny::runApp("app/")
+Pour démarrer une app : 1) Cliquer sur Run app 2) Ctrl + Shift + Entrée 3) shiny::runApp("app/")
 
 Dans la console, un message s'affiche avec l'url de l'app
 
-Pendant qu'une app Shiny est ouverte, la console est bloquée, il faut quitter l'app : 
+Pendant qu'une app Shiny est ouverte, la console est bloquée, il faut quitter l'app :
 
-1) Icône Stop dans la console
-2) Dans la console, appuyer sur Echap (ou Ctrl + C)
-3) Fermer la fenêtre d'app
+1)  Icône Stop dans la console
+2)  Dans la console, appuyer sur Echap (ou Ctrl + C)
+3)  Fermer la fenêtre d'app
 
 Lorsqu'on modifie le code de notre app, on peut recharger l'app directement (ou utiliser Ctrl + Shift + Entrée)
+
+### Adding UI controls
+
+Construisons une app pour afficher les jeux de données du package datasets :
+
+```{r}
+#| eval: false
+ui <- fluidPage(
+  selectInput(inputId = "dataset",
+              label = "Dataset",
+              choices = ls("package:datasets")),
+  verbatimTextOutput(outputId = "summary"),
+  tableOutput(outputId = "table")
+)
+
+```
+
+fluidPage() est une fonction qui définit la structure visuelle de la page.\
+selectInput() permet à l'utilisateur d'interagir avec l'app.\
+verbatimTextOutput() et tableOutput() sont des contrôles de sortie qui indiquent à Shiny où afficher la sortie.
+
+### Adding behaviour
+
+Nous allons maintenant indiquer à Shiny comment remplir les sorties renseignées dans l'UI :
+
+```{r}
+#| eval: false
+server <- function(input, output, session) {
+  output$summary <- renderPrint({
+    dataset <- get(input$dataset, "package:datasets")
+    summary(dataset)
+  })
+  
+  output$table <- renderTable({
+    dataset <- get(input$dataset, "package:datasets")
+    dataset
+  })
+}
+```
+
+Dans notre cas, renderPrint va avec verbatimTextOutput et renderTable avec tableOutput
+
+### Reducing duplication with reactive expressions
+
+Une ligne dans notre code est dupliquée. Deux techniques permettent d'éviter cela : 1) capturer la valeur à l'aide d'une variable 2) capturer le calcul à l'aide d'une fonction
+
+Ces deux approches ne fonctionnent pas ici, il nous faut utiliser une expression réactive à l'aide de reactive({...}) en l'assignant à une variable et l'appelant comme une fonction. Ce code ne sera exécuté que la première fois et cache le résultat jusqu'à modification.
+
+```{r}
+#| eval: false
+server <- function(input, output, session) {
+  
+  dataset <- reactive({
+    get(input$dataset, "package:datasets")
+  })
+  
+  output$summary <- renderPrint({
+    summary(dataset())
+  })
+  
+  output$table <- renderTable({
+    dataset()
+  })
+}
+```
+
+On peut consulter la [cheatsheet Shiny](https://raw.githubusercontent.com/rstudio/cheatsheets/main/shiny.pdf)
+
+# Basic UI

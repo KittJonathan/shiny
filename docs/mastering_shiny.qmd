@@ -1,0 +1,76 @@
+---
+title: "Mastering Shiny"
+subtitle: "Hadley Wickham"
+format: html
+editor: visual
+---
+
+Here are my notes from the book [Mastering Shiny](https://mastering-shiny.org/index.html).
+
+# Getting started
+
+## Your first Shiny app
+
+Une application Shiny contient deux éléments essentiels :
+
+-   l'**UI** (interface utilisateur) -\> définit l'apparence de l'application\
+-   le **server** -\> définit le fonctionnement de l'application
+
+Shiny utilise la **programmation réactive** : la sortie est automatiquement mise à jour quand l'entrée change : c'est le 3e élément clé d'une application Shiny.
+
+Commençons par installer le package :
+
+```{r}
+#| eval: false
+install.packages("shiny")
+```
+
+Pour vérifier la version installée, utiliser `packageVersion("shiny")` (\>= 1.5.0)
+
+Charger le package dans la session actuelle à l'aide de `library(shiny)`.
+
+### Create app directory and file
+
+Il existe plusieurs manières de créer une app Shiny. La plus simple consiste à créer un nouveau répertoire pour l'app et d'y ajouter un fichier `app.R` :
+
+```{r}
+#| eval: false
+library(shiny)
+
+ui <- fluidPage(
+  "Hello, world!"
+)
+
+server <- function(input, output, session) {
+}
+
+shinyApp(ui, server)
+```
+
+Notre app fait 4 choses : 
+
+1) Charger le package Shiny
+2) Définir l'interface utilisateur, la page html avec laquelle l'utilisateur va interagir
+3) Spécifier le comportement de notre app en définissant la fonction server (vide pour l'instant)  
+4) Exécuter shinyApp(ui, server) pour construire et démarrer l'app
+
+Astuces pour créer une nouvelle app dans RStudio :
+1) File > New Project > New Directory > Shiny Web Application
+2) dans un script app.R, taper "shinyapp" puis Shift + Tab
+
+### Running and stopping
+
+Pour démarrer une app : 
+1) Cliquer sur Run app 
+2) Ctrl + Shift + Entrée
+3) shiny::runApp("app/")
+
+Dans la console, un message s'affiche avec l'url de l'app
+
+Pendant qu'une app Shiny est ouverte, la console est bloquée, il faut quitter l'app : 
+
+1) Icône Stop dans la console
+2) Dans la console, appuyer sur Echap (ou Ctrl + C)
+3) Fermer la fenêtre d'app
+
+Lorsqu'on modifie le code de notre app, on peut recharger l'app directement (ou utiliser Ctrl + Shift + Entrée)

@@ -233,6 +233,35 @@ verbatimTextOutput() et tableOutput() sont des contrôles de sortie qui indiquen
 </section>
 <section id="basic-ui" class="level1">
 <h1>Basic UI</h1>
+<section id="inputs" class="level2">
+<h2 class="anchored" data-anchor-id="inputs">Inputs</h2>
+<p>Toutes les fonctions d’input ont le même premier argument : inputId, qui sert à connecter l’UI et le server (si l’UI a un input appelé “nom”, le server y accèdera à l’aide de input$nom).</p>
+<p>L’inputId doit : - être une chaîne simple contenant des lettres, des chiffres et des underscores (faire comme pour nommer une variable R)<br>
+- être unique (essentiel pour s’y référer dans le server !)</p>
+<p>Le 2e argument est le label : permet de créer une étiquette lisible par l’humain (pas de restriction, mais attention à le rendre lisible !)</p>
+<p>Le 3e argument est souvent la value, pour définir la valeur par défaut.</p>
+<p>Les autres arguments dépendent de la fonction d’input.</p>
+<p>Recommandation : renseigner les arguments inputId et label par position, et les autres arguments par nom;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sliderInput</span>(<span class="st">"min"</span>, <span class="st">"Limit (minimum)"</span>, <span class="at">value =</span> <span class="dv">50</span>, <span class="at">min =</span> <span class="dv">0</span>, <span class="at">max =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="free-text" class="level3">
+<h3 class="anchored" data-anchor-id="free-text">Free text</h3>
+<p>On peut collecter de courts textes avec textInput(), des mots de passe avec passwordInput() et des paragraphes de texte avec textAreaInput().</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textInput</span>(<span class="st">"name"</span>, <span class="st">"What's your name?"</span>, <span class="at">value =</span> <span class="st">"Texte"</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">passwordInput</span>(<span class="st">"password"</span>, <span class="st">"What's your password?"</span>),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textAreaInput</span>(<span class="st">"story"</span>, <span class="st">"Tell me about yourself"</span>, <span class="at">rows =</span> <span class="dv">3</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Pour s’assurer que le texte a certaines propriétés, on peut utiliser validate() (voir 8)</p>
+</section>
+<section id="numeric-inputs" class="level3">
+<h3 class="anchored" data-anchor-id="numeric-inputs">Numeric inputs</h3>
+<p>On peut collecter des valeurs numériques à l’aide de numericInput() ou sliderInput() (avec 1 ou 2 valeurs affichées)</p>
+</section>
+</section>
 </section>
 
 </main>

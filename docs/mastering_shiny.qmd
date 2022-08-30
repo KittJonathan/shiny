@@ -138,3 +138,41 @@ server <- function(input, output, session) {
 On peut consulter la [cheatsheet Shiny](https://raw.githubusercontent.com/rstudio/cheatsheets/main/shiny.pdf)
 
 # Basic UI
+
+## Inputs
+
+Toutes les fonctions d'input ont le même premier argument : inputId, qui sert à connecter l'UI et le server (si l'UI a un input appelé "nom", le server y accèdera à l'aide de input$nom).
+
+L'inputId doit : 
+- être une chaîne simple contenant des lettres, des chiffres et des underscores (faire comme pour nommer une variable R)  
+- être unique (essentiel pour s'y référer dans le server !)
+
+Le 2e argument est le label : permet de créer une étiquette lisible par l'humain (pas de restriction, mais attention à le rendre lisible !)
+
+Le 3e argument est souvent la value, pour définir la valeur par défaut.
+
+Les autres arguments dépendent de la fonction d'input.
+
+Recommandation : renseigner les arguments inputId et label par position, et les autres arguments par nom;
+```{r}
+#| eval: false
+sliderInput("min", "Limit (minimum)", value = 50, min = 0, max = 100)
+```
+
+### Free text
+
+On peut collecter de courts textes avec textInput(), des mots de passe avec passwordInput() et des paragraphes de texte avec textAreaInput().
+```{r}
+#| eval: false
+ui <- fluidPage(
+  textInput("name", "What's your name?", value = "Texte"),
+  passwordInput("password", "What's your password?"),
+  textAreaInput("story", "Tell me about yourself", rows = 3)
+)
+```
+
+Pour s'assurer que le texte a certaines propriétés, on peut utiliser validate() (voir 8)
+
+### Numeric inputs
+
+On peut collecter des valeurs numériques à l'aide de numericInput() ou sliderInput() (avec 1 ou 2 valeurs affichées)
